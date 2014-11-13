@@ -6,30 +6,32 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Map;
 import java.util.Random;
 
 import br.ufrn.consiste.exceptions.CloudMonitorException;
 import br.ufrn.consiste.exceptions.RegisterRMIException;
 import br.ufrn.consiste.model.InformationsVM;
+import br.ufrn.consiste.model.ResourcesUsage;
+import br.ufrn.consiste.model.Thresholds;
 
 public class CloudMonitorFacade {
 
 	private static Long idClientCloudMonitor = null;
 	private static CloudMonitor cloudMonitor = null;
-	private static CloudMonitorFacade cloudMonitorFacade  = null;
+	private static CloudMonitorFacade cloudMonitorFacade = null;
 
 	private CloudMonitorFacade() {
 		// TODO Auto-generated constructor stub
 	}
-	
-	public static synchronized CloudMonitorFacade getInstance(){
-		if(cloudMonitorFacade == null){
+
+	public static synchronized CloudMonitorFacade getInstance() {
+		if (cloudMonitorFacade == null) {
 			cloudMonitorFacade = new CloudMonitorFacade();
 		}
-		
+
 		return cloudMonitorFacade;
 	}
-	
 
 	private static String createRMIRegister() throws RegisterRMIException {
 
@@ -79,23 +81,75 @@ public class CloudMonitorFacade {
 		}
 
 	}
-	
 
-	public void monitoreVM(InformationsVM informations) throws CloudMonitorException {
+	public void monitoreVM(InformationsVM informations)
+			throws CloudMonitorException {
 
 		try {
 			if (cloudMonitor == null) {
 				registerInCloudMonitor();
 			}
-			
-			cloudMonitor.monitoreVM(idClientCloudMonitor, informations.getVmIp(),
-					informations.getTomcatPort(), informations.getTomcatUser(),
-					informations.getTomcatPassword(), informations.getThresholds());
-			
+
+			cloudMonitor.monitoreVM(idClientCloudMonitor,
+					informations.getVmIp(), informations.getTomcatPort(),
+					informations.getTomcatUser(),
+					informations.getTomcatPassword(),
+					informations.getThresholds());
+
 		} catch (RegisterRMIException | RemoteException e) {
-			throw new CloudMonitorException("Erro ao moitorar VM. "+e.getMessage());
+			throw new CloudMonitorException("Erro ao moitorar VM. "
+					+ e.getMessage());
 		}
 
 	}
 
+	public void cancelMonitoringVM(String ipVM) throws CloudMonitorException {
+
+		try {
+			if (cloudMonitor == null) {
+				registerInCloudMonitor();
+			}
+
+			cloudMonitor.monitoringVMCancel(idClientCloudMonitor, ipVM);
+
+		} catch (RegisterRMIException | RemoteException e) {
+			throw new CloudMonitorException(
+					"Erro ao cancelar o monitoramento da VM.");
+		}
+	}
+
+	public void updatThresholds(String ipVM, Thresholds thresholds)
+			throws CloudMonitorException {
+		try {
+			if (cloudMonitor == null) {
+				registerInCloudMonitor();
+			}
+
+			cloudMonitor
+					.updatThresholds(idClientCloudMonitor, ipVM, thresholds);
+
+		} catch (RegisterRMIException | RemoteException e) {
+			throw new CloudMonitorException("Erro ao atualizar os thresholds.");
+		}
+	}
+
+	public ResourcesUsage getAverageResourcesUsage(String ipVm, int lastHours)
+			throws CloudMonitorException {
+		try {
+			if (cloudMonitor == null) {
+				registerInCloudMonitor();
+			}
+
+			
+			Map<String, ResourcesUsage> reUsage = cloudMonitor.getMestricsVMs(
+					idClientCloudMonitor, new String[] { ipVm }, lastHours);
+
+			return reUsage.get(ipVm);
+
+		} catch (RegisterRMIException | RemoteException e) {
+			throw new CloudMonitorException("Erro ao recuperar as metricas." +e.getMessage());
+		}
+	}
+	
+	
 }

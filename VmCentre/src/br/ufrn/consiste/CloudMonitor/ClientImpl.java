@@ -1,11 +1,7 @@
 package br.ufrn.consiste.CloudMonitor;
 
-import java.rmi.Naming;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Random;
 
 public class ClientImpl extends UnicastRemoteObject implements
 		ClientCloudMonitor {
@@ -18,34 +14,34 @@ public class ClientImpl extends UnicastRemoteObject implements
 	}
 
 	@Override
-	public void cpuThreshold(long vmId, double cpuUsage) throws RemoteException {
+	public void cpuThreshold(String ipVm, double cpuUsage) throws RemoteException {
 		System.out.println("Client callback: cpu usage = " + cpuUsage);
 
 	}
 
 	@Override
-	public void memoryThreshold(long vmId, double memoryUsage)
+	public void memoryThreshold(String ipVm, double memoryUsage)
 			throws RemoteException {
 		System.out.println("Client callback: memory usage = " + memoryUsage);
 
 	}
 
 	@Override
-	public void storageThresold(long vmId, double storageUsage)
+	public void storageThresold(String ipVm, double storageUsage)
 			throws RemoteException {
 		System.out.println("Client callback: storage usage = " + storageUsage);
 
 	}
 
 	@Override
-	public void txBytesThreshold(long vmId, long txBytes)
+	public void txBytesThreshold(String ipVm, long txBytes)
 			throws RemoteException {
 		System.out.println("Client callback: txBytes = " + txBytes);
 
 	}
 
 	@Override
-	public void rxBytesthreshold(long vmId, long rxbytes)
+	public void rxBytesthreshold(String ipVm, long rxbytes)
 			throws RemoteException {
 		System.out.println("Client callback: rxBytes = " + rxbytes);
 

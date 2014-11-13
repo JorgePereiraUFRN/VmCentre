@@ -13,15 +13,15 @@ public interface CloudMonitor extends Remote {
 
 	void unregister(Long clientId) throws RemoteException;
 
-	long monitoreVM(Long clientId, String ipVm, int tomcatPort,
+	void monitoreVM(Long clientId, String ipVm, int tomcatPort,
 			String tomcatUser, String tomcatPassword, Thresholds thresholds)
 			throws RemoteException;
 
-	void monitoringVMCancel(Long clientId, Long vmId) throws RemoteException;
+	void monitoringVMCancel(Long clientId, String ipVM) throws RemoteException;
 	
-	void updatThresholds(Long clientId, Long vmId, Thresholds thresholds) throws RemoteException;
+	void updatThresholds(Long clientId, String ipVM, Thresholds thresholds) throws RemoteException;
 
-	Map<Long, ResourcesUsage> getMestricsVMs(Long clientId, Long[] VMsId)
+	Map<String, ResourcesUsage> getMestricsVMs(Long clientId, String[] ips, int lastHour)
 			throws RemoteException;
 
 }

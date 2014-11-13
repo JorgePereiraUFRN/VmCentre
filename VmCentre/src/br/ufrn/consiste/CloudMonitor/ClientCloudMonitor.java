@@ -6,15 +6,15 @@ import java.rmi.RemoteException;
 
 public interface ClientCloudMonitor extends Remote{
 	
-	void cpuThreshold(long vmId, double cpuUsage) throws RemoteException;
+	void cpuThreshold(String ipVm, double cpuUsage) throws RemoteException;
 	
-	void memoryThreshold(long vmId, double memoryUsage) throws RemoteException;
+	void memoryThreshold(String ipVm, double memoryUsage) throws RemoteException;
 	
-	void storageThresold(long vmId, double storageUsage) throws RemoteException;
+	void storageThresold(String ipVm, double storageUsage) throws RemoteException;
 	
-	void txBytesThreshold(long vmId, long txBytes) throws RemoteException;
+	void txBytesThreshold(String ipVm, long txBytes) throws RemoteException;
 	
-	void rxBytesthreshold(long vmId, long rxbytes) throws RemoteException;
+	void rxBytesthreshold(String ipVm, long rxbytes) throws RemoteException;
 	
 	
 
